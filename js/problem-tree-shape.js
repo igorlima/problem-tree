@@ -105,6 +105,7 @@ var ProblemTree = (function(ProblemTree) {
 
   function create_text(shape, str_text) {
     var text = r.text(0, 0, str_text || "");
+    text.attr('font', "10px \"Courier\"");
     text.data('shape', shape);
     shape.data('text', text);
     move_text(shape);
