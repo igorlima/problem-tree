@@ -11,7 +11,9 @@ var ProblemTree = (function(ProblemTree) {
       color_effect = Raphael.getColor(),
       DEFAULT = {
         WIDTH: 30,
-        HEIGHT: 20
+        HEIGHT: 20,
+        MAX_CHAR: 9,
+        WIDTH_CHAR: 30/9 // WIDTH/MAX_CHAR
       };
 
   /********************************
@@ -27,7 +29,6 @@ var ProblemTree = (function(ProblemTree) {
     }
 
     return problem;
-
   };
 
   Shape.effect = function() {
@@ -40,7 +41,6 @@ var ProblemTree = (function(ProblemTree) {
 
     effects.push(effect);
     return effect;
-
   };
 
   Shape.cause = function() {
@@ -53,7 +53,6 @@ var ProblemTree = (function(ProblemTree) {
 
     causes.push(cause);
     return cause;
-
   };
 
 
@@ -124,6 +123,17 @@ var ProblemTree = (function(ProblemTree) {
   function change_text(text) {
     var new_text = prompt("Type a new text", text.attr('text'));
     text.attr('text', new_text);
+    size_text_shape(text);
+  }
+
+  function size_text_shape(text) {
+    var str = text.attr('text'),
+        shape = text.data('shape'),
+        width_shape = DEFAULT.MAX_CHAR >= str.length ? DEFAULT.WIDTH : str.length * DEFAULT.WIDTH_CHAR;
+
+    shape.attr( shape.type == "rect" ? {width: width_shape*2} : {rx: width_shape} );
+    move_text(shape);
+    update_connections();
   }
 
   // Return the module
