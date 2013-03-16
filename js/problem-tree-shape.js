@@ -105,6 +105,7 @@ var ProblemTree = (function(ProblemTree) {
 
   function create_text(shape) {
     var text = r.text(0, 0, "teste");
+    text.data('shape', shape);
     shape.data('text', text);
     move_text(shape);
     text.dblclick(function(){
