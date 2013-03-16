@@ -23,7 +23,7 @@ var ProblemTree = (function(ProblemTree) {
 
     if (!problem) {
       problem = r.rect(290, 80, DEFAULT.WIDTH*2, DEFAULT.HEIGHT*2, 10);
-      problem = config_shape(problem, color_problem);
+      problem = config_shape(problem, color_problem, "problem");
     }
 
     return problem;
@@ -34,8 +34,8 @@ var ProblemTree = (function(ProblemTree) {
     var problem = Shape.problem(),
         effect;
 
-    effect = r.ellipse(190, 100, DEFAULT.WIDTH, DEFAULT.HEIGHT);
-    effect = config_shape(effect, color_effect);
+    effect = r.ellipse(290, 27, DEFAULT.WIDTH, DEFAULT.HEIGHT);
+    effect = config_shape(effect, color_effect, "effect");
     connect(effect, problem, "#000");
 
     effects.push(effect);
@@ -48,7 +48,7 @@ var ProblemTree = (function(ProblemTree) {
         cause;
 
     cause = r.ellipse(290, 180, DEFAULT.WIDTH, DEFAULT.HEIGHT);
-    cause = config_shape(cause, color_cause);
+    cause = config_shape(cause, color_cause, "cause");
     connect(cause, problem, "#000");
 
     causes.push(cause);
@@ -93,18 +93,18 @@ var ProblemTree = (function(ProblemTree) {
     }
   }
 
-  function config_shape(shape, color) {
+  function config_shape(shape, color, str_text) {
     shape.attr({fill: color, stroke: color, "fill-opacity": 0, "stroke-width": 2, cursor: "move"});
     shape.drag(move, dragger, up);
-    create_text(shape);
+    create_text(shape, str_text);
     shape.dblclick(function() {
       change_text(this.data('text'));
     });
     return shape;
   }
 
-  function create_text(shape) {
-    var text = r.text(0, 0, "teste");
+  function create_text(shape, str_text) {
+    var text = r.text(0, 0, str_text || "");
     text.data('shape', shape);
     shape.data('text', text);
     move_text(shape);
@@ -121,7 +121,7 @@ var ProblemTree = (function(ProblemTree) {
   }
 
   function change_text(text) {
-    var new_text = prompt("Novo texto", text.attr('text'));
+    var new_text = prompt("Type a new text", text.attr('text'));
     text.attr('text', new_text);
   }
 
