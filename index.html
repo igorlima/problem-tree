@@ -28,17 +28,13 @@
     <script src="js/problem-tree-shape.js" type="text/javascript" charset="utf-8"></script>
     <script>
       var tree = new ProblemTreeClass({
-            idElementHtml: 'holder',
-            width: 640,
-            height: 480
+            idElementHtml: 'holder'
           });
 
       document.getElementById('btnNew').addEventListener('click', function() {
         tree.canvas().remove();
         tree = new ProblemTreeClass({
-          idElementHtml: 'holder',
-          width: 640,
-          height: 480
+          idElementHtml: 'holder'
         });
       });
 
