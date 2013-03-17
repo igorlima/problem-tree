@@ -1,11 +1,6 @@
-var ProblemTree = (function(ProblemTree) {
+;(function(ProblemTreeClass) {
 
-  var Shape = ProblemTree.Shape = {},
-      r = ProblemTree.canvas(),
-      problem,
-      connections = [],
-      effects = [],
-      causes = []
+  var fn = ProblemTreeClass.prototype,
       color_problem = Raphael.getColor(),
       color_cause = Raphael.getColor(),
       color_effect = Raphael.getColor(),
@@ -16,40 +11,50 @@ var ProblemTree = (function(ProblemTree) {
         WIDTH_CHAR: 30/9 // WIDTH/MAX_CHAR
       };
 
+  fn.connections = [];
+  fn.effects = [];
+  fn.causes = [];
+
   /********************************
    * Public
    ********************************/
 
-  Shape.problem = function() {
-    var color;
+  fn.problem = function(x, y, str_text) {
+    var r = this.canvas(),
+        tree = this,
+        problem = r.rect(x || 290, y || 80, DEFAULT.WIDTH*2, DEFAULT.HEIGHT*2, 10);
 
-    if (!problem) {
-      problem = r.rect(290, 80, DEFAULT.WIDTH*2, DEFAULT.HEIGHT*2, 10);
-      problem = config_shape(problem, color_problem, "problem");
-    }
+    config_shape(tree, problem, color_problem, str_text || "problem");
 
-    return problem;
+    return (this.problem = function () {
+      return problem;
+    })();
+
   };
 
-  Shape.effect = function() {
-    var problem = Shape.problem(),
-        effect;
+  fn.effect = function(x, y, str_text) {
+    var r = this.canvas(),
+        tree = this,
+        problem = this.problem(),
+        effects = this.effects,
+        effect = r.ellipse(x || 290, y || 27, DEFAULT.WIDTH, DEFAULT.HEIGHT);
 
-    effect = r.ellipse(290, 27, DEFAULT.WIDTH, DEFAULT.HEIGHT);
-    effect = config_shape(effect, color_effect, "effect");
-    connect(effect, problem, "#000");
-
+    config_shape(tree, effect, color_effect, str_text || "effect");
+    connect(tree, effect, problem, "#000");
     effects.push(effect);
     return effect;
   };
 
-  Shape.cause = function() {
-    var problem = Shape.problem(),
+  fn.cause = function(x, y, str_text) {
+    var r = this.canvas(),
+        tree = this,
+        problem = this.problem(),
+        causes = this.causes,
         cause;
 
-    cause = r.ellipse(290, 180, DEFAULT.WIDTH, DEFAULT.HEIGHT);
-    cause = config_shape(cause, color_cause, "cause");
-    connect(cause, problem, "#000");
+    cause = r.ellipse(x || 290, y || 180, DEFAULT.WIDTH, DEFAULT.HEIGHT);
+    cause = config_shape(tree, cause, color_cause, str_text || "cause");
+    connect(tree, cause, problem, "#000");
 
     causes.push(cause);
     return cause;
@@ -61,63 +66,75 @@ var ProblemTree = (function(ProblemTree) {
    * Private
    ********************************/
 
-  function connect(obj1, obj2, color_line, color_background) {
-    var connection = r.connection(obj1, obj2, color_line, color_background);
-    connections.push(connection);
+  function connect(instanceTree, obj1, obj2, color_line, color_background) {
+    var r = instanceTree.canvas(),
+        connection = r.connection(obj1, obj2, color_line, color_background),
+        connections = instanceTree.connections;
 
+    connections.push(connection);
     return connection;
   }
 
   function dragger() {
-    this.ox = this.type == "rect" ? this.attr("x") : this.attr("cx");
-    this.oy = this.type == "rect" ? this.attr("y") : this.attr("cy");
-    this.animate({"fill-opacity": .2}, 500);
+    var shape = this;
+    shape.ox = shape.type == "rect" ? shape.attr("x") : shape.attr("cx");
+    shape.oy = shape.type == "rect" ? shape.attr("y") : shape.attr("cy");
+    shape.animate({"fill-opacity": .2}, 500);
   }
 
-  function move(dx, dy) {
-    var att = this.type == "rect" ? {x: this.ox + dx, y: this.oy + dy} : {cx: this.ox + dx, cy: this.oy + dy};
-    this.attr(att);
-    move_text(this);
-    update_connections();
+  function move(instanceTree, shape, dx, dy) {
+    var tree = instanceTree,
+        r = tree.canvas(),
+        att = shape.type == "rect" ? {x: shape.ox + dx, y: shape.oy + dy} : {cx: shape.ox + dx, cy: shape.oy + dy};
+
+    shape.attr(att);
+    move_text(shape);
+    update_connections(tree);
     r.safari();
   }
 
   function up() {
-    this.animate({"fill-opacity": 0}, 500);
+    var shape = this;
+    shape.animate({"fill-opacity": 0}, 500);
   }
 
-  function update_connections() {
+  function update_connections(instanceTree) {
+    var r = instanceTree.canvas(),
+        connections = instanceTree.connections;
+
     for (var i = connections.length; i--;) {
       r.connection(connections[i]);
     }
   }
 
-  function config_shape(shape, color, str_text) {
+  function config_shape(instanceTree, shape, color, str_text) {
     shape.attr({fill: color, stroke: color, "fill-opacity": 0, "stroke-width": 2, cursor: "move"});
-    shape.drag(move, dragger, up);
-    create_text(shape, str_text);
+    shape.drag( function(dx, dy) {
+        var shape = this;
+        move(instanceTree, shape, dx, dy);
+      }, dragger, up);
+
+    create_text(instanceTree, shape, str_text);
     shape.dblclick(function() {
-      change_text(this.data('text'));
+      change_text(shape.data('text'));
+      update_connections(instanceTree);
     });
     return shape;
   }
 
-  function create_text(shape, str_text) {
-    var text = r.text(0, 0, str_text || "");
+  function create_text(instanceTree, shape, str_text) {
+    var tree = instanceTree,
+        r = tree.canvas(),
+        text = r.text(0, 0, str_text || "");
+
     text.attr('font', "10px \"Courier\"");
     text.data('shape', shape);
     shape.data('text', text);
-    move_text(shape);
-    text.dblclick(function(){
-      change_text(this);
+    size_text_shape(text);
+    text.dblclick(function() {
+      change_text(text);
+      update_connections(tree);
     });
-  }
-
-  function move_text(shape) {
-    var text = shape.data("text"),
-        att = shape.type == "rect" ? {x: shape.attrs['x'] + shape.attrs['width']/2, y: shape.attrs['y'] + shape.attrs['height']/2} : {x: shape.attrs['cx'], y: shape.attrs['cy']};
-
-    text.attr(att);
   }
 
   function change_text(text) {
@@ -133,10 +150,13 @@ var ProblemTree = (function(ProblemTree) {
 
     shape.attr( shape.type == "rect" ? {width: width_shape*2} : {rx: width_shape} );
     move_text(shape);
-    update_connections();
   }
 
-  // Return the module
-  return ProblemTree;
+  function move_text(shape) {
+    var text = shape.data("text"),
+        att = shape.type == "rect" ? {x: shape.attrs['x'] + shape.attrs['width']/2, y: shape.attrs['y'] + shape.attrs['height']/2} : {x: shape.attrs['cx'], y: shape.attrs['cy']};
+
+    text.attr(att);
+  }
   
-}(ProblemTree));
+}(ProblemTreeClass));

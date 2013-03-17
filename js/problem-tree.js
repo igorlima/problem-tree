@@ -1,22 +1,17 @@
-var ProblemTree = {
-  idElementHtml: 'holder',
-  width: 640,
-  height: 480
-};
 
+;(function(window, Raphael) {
+  var r, fn;
 
-ProblemTree = (function(ProblemTree, Raphael) {
-  var r;
+  var ProblemTreeClass = window.ProblemTreeClass = function(attrs) {
+    var r = Raphael(attrs['idElementHtml'], attrs['width'], attrs['height']);
 
-  (function init() {
-    r = Raphael(ProblemTree['idElementHtml'], ProblemTree['width'], ProblemTree['height']);
-  })();
+    this.attrs = attrs;
+    this.canvas = function() {
+      return r;
+    };
 
-  ProblemTree.canvas = function() {
-    return r;
-  };
+  }
 
+  fn = ProblemTreeClass.prototype;
 
-  return ProblemTree
-
-}(ProblemTree || {}, Raphael) );
+}(window, Raphael));

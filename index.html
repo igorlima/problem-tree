@@ -26,16 +26,22 @@
     <script src="js/problem-tree.js"       type="text/javascript" charset="utf-8"></script>
     <script src="js/problem-tree-shape.js" type="text/javascript" charset="utf-8"></script>
     <script>
+      var tree = new ProblemTreeClass({
+            idElementHtml: 'holder',
+            width: 640,
+            height: 480
+          });
+
       document.getElementById('btnProblem').addEventListener('click', function() {
-        ProblemTree.Shape.problem();
+        tree.problem();
       });
 
       document.getElementById('btnEffect').addEventListener('click', function() {
-        ProblemTree.Shape.effect();
+        tree.effect();
       });
 
       document.getElementById('btnCause').addEventListener('click', function() {
-        ProblemTree.Shape.cause();
+        tree.cause();
       });
 
     </script>
