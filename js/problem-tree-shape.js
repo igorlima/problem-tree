@@ -82,9 +82,9 @@
     shape.animate({"fill-opacity": .2}, 500);
   }
 
-  function move(instanceTree, shape, dx, dy) {
-    var tree = instanceTree,
-        r = tree.canvas(),
+  function move(dx, dy) {
+    var shape = this,
+        r = shape.paper,
         att = shape.type == "rect" ? {x: shape.ox + dx, y: shape.oy + dy} : {cx: shape.ox + dx, cy: shape.oy + dy};
 
     shape.attr(att);
@@ -109,10 +109,7 @@
 
   function config_shape(instanceTree, shape, color, str_text) {
     shape.attr({fill: color, stroke: color, "fill-opacity": 0, "stroke-width": 2, cursor: "move"});
-    shape.drag( function(dx, dy) {
-        var shape = this;
-        move(instanceTree, shape, dx, dy);
-      }, dragger, up);
+    shape.drag(move, dragger, up);
 
     create_text(instanceTree, shape, str_text);
     shape.dblclick(function() {
