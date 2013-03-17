@@ -24,7 +24,7 @@
         tree = this,
         problem = r.rect(x || 290, y || 80, DEFAULT.WIDTH*2, DEFAULT.HEIGHT*2, 10);
 
-    config_shape(tree, problem, color_problem, str_text || "problem");
+    config_shape(tree, problem, color_problem, str_text || "problem", 3);
 
     return (this.problem = function () {
       return problem;
@@ -107,8 +107,8 @@
     }
   }
 
-  function config_shape(instanceTree, shape, color, str_text) {
-    shape.attr({fill: color, stroke: color, "fill-opacity": 0, "stroke-width": 2, cursor: "move"});
+  function config_shape(instanceTree, shape, color, str_text, stroke_width) {
+    shape.attr({fill: color, stroke: color, "fill-opacity": 0, "stroke-width": stroke_width || 2, cursor: "move"});
     shape.drag(move, dragger, up);
 
     create_text(instanceTree, shape, str_text);
