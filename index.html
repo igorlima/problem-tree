@@ -15,6 +15,7 @@
   <body>
     <h1>Problem Tree</h1>
     <p>Drag shapes around. Double click to edit the text.</p>
+    <button id="btnNew">New</button>
     <button id="btnProblem">Problem</button>
     <button id="btnEffect">Effect</button>
     <button id="btnCause">Cause</button>
@@ -31,6 +32,15 @@
             width: 640,
             height: 480
           });
+
+      document.getElementById('btnNew').addEventListener('click', function() {
+        tree.canvas().remove();
+        tree = new ProblemTreeClass({
+          idElementHtml: 'holder',
+          width: 640,
+          height: 480
+        });
+      });
 
       document.getElementById('btnProblem').addEventListener('click', function() {
         tree.problem();
