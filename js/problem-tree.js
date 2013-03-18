@@ -3,7 +3,7 @@
   var r, fn,
       DEFAULT = {
         WIDTH: 400,
-        HEIGHT: 400
+        HEIGHT: 380
       };
 
   var ProblemTreeClass = window.ProblemTreeClass = function(attrs) {
