@@ -69,9 +69,9 @@
    * Private
    ********************************/
 
-  function connect(instanceTree, obj1, obj2, color_line, color_background) {
+  function connect(instanceTree, obj1, obj2, color_line, color_background, opacity) {
     var r = instanceTree.canvas(),
-        connection = r.connection(obj1, obj2, color_line, color_background),
+        connection = r.connection(obj1, obj2, color_line, color_background, opacity),
         connections = instanceTree.connections;
 
     connections.push(connection);
