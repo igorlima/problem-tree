@@ -43,7 +43,7 @@
         effect = r.ellipse(x || DEFAULT.IDENT_X, y || DEFAULT.IDENT_Y - 100, DEFAULT.WIDTH, DEFAULT.HEIGHT);
 
     config_shape(tree, effect, color_effect, str_text || "effect");
-    connect(tree, effect, problem, "#000");
+    connect(tree, effect, problem, "#000", null, 0.1);
     effects.push(effect);
     return effect;
   };
@@ -57,7 +57,7 @@
 
     cause = r.ellipse(x || DEFAULT.IDENT_X, y || DEFAULT.IDENT_Y + 150, DEFAULT.WIDTH, DEFAULT.HEIGHT);
     cause = config_shape(tree, cause, color_cause, str_text || "cause");
-    connect(tree, cause, problem, "#000");
+    connect(tree, cause, problem, "#000", null, 0.1);
 
     causes.push(cause);
     return cause;
