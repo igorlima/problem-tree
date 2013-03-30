@@ -27,7 +27,7 @@
         tree = this,
         problem = r.rect(x || DEFAULT.IDENT_X, y || DEFAULT.IDENT_Y, DEFAULT.WIDTH*2, DEFAULT.HEIGHT*2, 10);
 
-    config_shape(tree, problem, color_problem, str_text || "problem", 3);
+    config_shape(tree, problem, color_problem, str_text || "problem", 2);
 
     return (this.problem = function () {
       return problem;
