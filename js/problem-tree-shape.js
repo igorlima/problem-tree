@@ -4,6 +4,7 @@
       color_problem = Raphael.getColor(),
       color_cause = Raphael.getColor(),
       color_effect = Raphael.getColor(),
+      color_background = "#ffffff",
       DEFAULT = {
         IDENT: 150,
         WIDTH: 30,
@@ -80,6 +81,7 @@
     var shape = this;
     shape.ox = shape.type == "rect" ? shape.attr("x") : shape.attr("cx");
     shape.oy = shape.type == "rect" ? shape.attr("y") : shape.attr("cy");
+    shape.attr("fill", shape.attr("stroke"));
     shape.animate({"fill-opacity": .2}, 500);
   }
 
@@ -96,7 +98,8 @@
 
   function up() {
     var shape = this;
-    shape.animate({"fill-opacity": 0}, 500);
+    shape.attr("fill", color_background);
+    shape.animate({"fill-opacity": 1}, 500);
   }
 
   function update_connections(instanceTree) {
@@ -109,7 +112,7 @@
   }
 
   function config_shape(instanceTree, shape, color, str_text, stroke_width) {
-    shape.attr({fill: color, stroke: color, "fill-opacity": 0, "stroke-width": stroke_width || 2, cursor: "move"});
+    shape.attr({fill: color_background, stroke: color, "fill-opacity": 1, "stroke-width": stroke_width || 2, cursor: "move"});
     shape.drag(move, dragger, up);
 
     create_text(instanceTree, shape, str_text);
