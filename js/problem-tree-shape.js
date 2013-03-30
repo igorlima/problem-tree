@@ -6,7 +6,8 @@
       color_effect = Raphael.getColor(),
       color_background = "#ffffff",
       DEFAULT = {
-        IDENT: 150,
+        IDENT_X: 160,
+        IDENT_Y: 180,
         WIDTH: 30,
         HEIGHT: 20,
         MAX_CHAR: 9,
@@ -24,7 +25,7 @@
   fn.problem = function(x, y, str_text) {
     var r = this.canvas(),
         tree = this,
-        problem = r.rect(x || DEFAULT.IDENT, y || 80, DEFAULT.WIDTH*2, DEFAULT.HEIGHT*2, 10);
+        problem = r.rect(x || DEFAULT.IDENT_X, y || DEFAULT.IDENT_Y, DEFAULT.WIDTH*2, DEFAULT.HEIGHT*2, 10);
 
     config_shape(tree, problem, color_problem, str_text || "problem", 3);
 
@@ -39,7 +40,7 @@
         tree = this,
         problem = this.problem(),
         effects = this.effects,
-        effect = r.ellipse(x || DEFAULT.IDENT, y || 27, DEFAULT.WIDTH, DEFAULT.HEIGHT);
+        effect = r.ellipse(x || DEFAULT.IDENT_X, y || DEFAULT.IDENT_Y - 100, DEFAULT.WIDTH, DEFAULT.HEIGHT);
 
     config_shape(tree, effect, color_effect, str_text || "effect");
     connect(tree, effect, problem, "#000");
@@ -54,7 +55,7 @@
         causes = this.causes,
         cause;
 
-    cause = r.ellipse(x || DEFAULT.IDENT, y || 180, DEFAULT.WIDTH, DEFAULT.HEIGHT);
+    cause = r.ellipse(x || DEFAULT.IDENT_X, y || DEFAULT.IDENT_Y + 150, DEFAULT.WIDTH, DEFAULT.HEIGHT);
     cause = config_shape(tree, cause, color_cause, str_text || "cause");
     connect(tree, cause, problem, "#000");
 
